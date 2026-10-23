@@ -1,0 +1,42 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/steamkit-protos",
+    "crates/steamkit",
+    "crates/steamkit-tools",
+    "crates/steamkit-samples",
+    "crates/steamkit-tests",
+    "crates/steamkit-nethook",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.82"
+license = "LGPL-2.1-only"
+
+[workspace.dependencies]
+prost = "0.13"
+prost-types = "0.13"
+tokio = { version = "1", features = ["full"] }
+tokio-util = { version = "0.7", features = ["codec"] }
+async-trait = "0.1"
+futures = "0.3"
+thiserror = "1"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+bytes = "1"
+hex = "0.4"
+base64 = "0.22"
+rand = "0.8"
+serde_json = "1"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+# The incremental cache gets huge (30+ GB) for this workspace and doesn't save much.
+[profile.dev]
+incremental = false

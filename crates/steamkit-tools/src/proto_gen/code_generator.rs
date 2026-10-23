@@ -1,0 +1,244 @@
+//! Turns a compiled set of `.proto` files into Rust source.
+//!
+//! Uses `prost_build` underneath:
+//!
+//! * `--namespace` becomes the module path of the generated types;
+//! * every service gets a trait (see [`SteamServiceGenerator`]);
+//! * protobuf extensions aren't emitted.
+
+use std::collections::HashMap;
+
+use prost_build::{Config, Method, Module, Service};
+use prost_types::FileDescriptorProto;
+
+use crate::proto_dumper::raw_options::RawDescriptor;
+use crate::proto_error::{ProtoError, ProtoResult};
+
+/// Generates Rust source from protobuf descriptors.
+#[derive(Clone, Debug, Default)]
+pub struct RustCodeGenerator {
+    namespace: Option<String>,
+}
+
+impl RustCodeGenerator {
+    /// Creates a generator that puts the generated types into `namespace`.
+    ///
+    /// The namespace becomes the protobuf package of every file that doesn't
+    /// declare one, and so the module path of the generated types.
+    pub fn new(namespace: Option<String>) -> Self {
+        RustCodeGenerator { namespace }
+    }
+
+    /// Generates the Rust source for the given descriptors.
+    pub fn generate(&self, files: Vec<RawDescriptor>) -> ProtoResult<String> {
+        if let Some(namespace) = &self.namespace {
+            validate_namespace(namespace)?;
+        }
+
+        let requests: Vec<(Module, FileDescriptorProto)> = files
+            .into_iter()
+            .map(|file| {
+                let module = Module::from_protobuf_package_name(file.proto.package());
+                (module, file.proto)
+            })
+            .collect();
+
+        let mut config = Config::new();
+        config.service_generator(Box::new(SteamServiceGenerator::default()));
+
+        let modules = config.generate(requests).map_err(|error| ProtoError::Compile {
+            file: "<generated>".to_owned(),
+            message: error.to_string(),
+        })?;
+
+        Ok(compose(&modules, self.namespace.as_deref()))
+    }
+}
+
+/// Checks that a namespace can be used as a Rust module path.
+fn validate_namespace(namespace: &str) -> ProtoResult<()> {
+    if namespace.is_empty() {
+        return Err(ProtoError::invalid_argument("the namespace must not be empty"));
+    }
+
+    for part in namespace.split('.') {
+        let valid = !part.is_empty()
+            && part
+                .chars()
+                .all(|character| character.is_ascii_alphanumeric() || character == '_');
+
+        if !valid {
+            return Err(ProtoError::invalid_argument(format!(
+                "'{namespace}' is not a valid namespace: '{part}' is not an identifier"
+            )));
+        }
+    }
+
+    Ok(())
+}
+
+/// Turns a namespace into the Rust module path the types live in.
+fn namespace_to_module_path(namespace: &str) -> Vec<String> {
+    namespace
+        .split('.')
+        .filter(|part| !part.is_empty())
+        .map(to_snake)
+        .collect()
+}
+
+/// Converts a name to `snake_case`.
+fn to_snake(name: &str) -> String {
+    let characters: Vec<char> = name.chars().collect();
+    let mut out = String::with_capacity(name.len());
+
+    for (index, character) in characters.iter().enumerate() {
+        if character.is_uppercase() {
+            let previous_is_lower =
+                index > 0 && (characters[index - 1].is_lowercase() || characters[index - 1].is_numeric());
+            let previous_is_upper = index > 0 && characters[index - 1].is_uppercase();
+            let next_is_lower = index + 1 < characters.len() && characters[index + 1].is_lowercase();
+
+            if index > 0 && (previous_is_lower || (previous_is_upper && next_is_lower)) {
+                out.push('_');
+            }
+
+            out.extend(character.to_lowercase());
+        } else {
+            out.push(*character);
+        }
+    }
+
+    out
+}
+
+/// Writes the generated modules into a single Rust file.
+///
+/// Every protobuf package becomes a module tree; packages with a common
+/// prefix share modules. With a namespace, everything goes under the
+/// namespace's module path.
+fn compose(modules: &HashMap<Module, String>, namespace: Option<&str>) -> String {
+    let mut sorted: Vec<(&Module, &String)> = modules.iter().collect();
+    sorted.sort_by(|left, right| left.0.cmp(right.0));
+
+    let mut body = String::new();
+    let mut stack: Vec<String> = Vec::new();
+
+    for (module, code) in sorted {
+        let parts: Vec<String> = module.parts().map(str::to_owned).collect();
+
+        while !parts.starts_with(&stack) {
+            stack.pop();
+            body.push_str("}\n");
+        }
+
+        while stack.len() < parts.len() {
+            let part = parts[stack.len()].clone();
+            body.push_str(&format!("pub mod {part} {{\n"));
+            stack.push(part);
+        }
+
+        body.push_str(code);
+    }
+
+    while stack.pop().is_some() {
+        body.push_str("}\n");
+    }
+
+    let mut out = String::new();
+    out.push_str("// This file is @generated by steamkit-proto-gen.\n");
+
+    let wrapper = namespace.map(namespace_to_module_path).unwrap_or_default();
+
+    for part in &wrapper {
+        out.push_str(&format!("pub mod {part} {{\n"));
+    }
+
+    out.push_str(&body);
+
+    for _ in &wrapper {
+        out.push_str("}\n");
+    }
+
+    out
+}
+
+/// Generates a trait for every Steam unified messages service.
+///
+/// The trait has the service name, the wire name of every method and one
+/// handler per method. Methods returning `NoResponse` are notifications;
+/// everything else answers with a response.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct SteamServiceGenerator;
+
+impl prost_build::ServiceGenerator for SteamServiceGenerator {
+    fn generate(&mut self, service: Service, buf: &mut String) {
+        let trait_name = service.name.as_str();
+
+        buf.push_str(&format!(
+            "/// Steam unified messages service `{}`.\n",
+            service.proto_name
+        ));
+        buf.push_str(&format!("pub trait {trait_name} {{\n"));
+        buf.push_str("    /// The name of the service on the wire.\n");
+        buf.push_str(&format!(
+            "    const SERVICE_NAME: &'static str = \"{}\";\n",
+            service.proto_name
+        ));
+
+        for method in &service.methods {
+            let notification = is_notification(method);
+            let constant = screaming_snake(&method.proto_name);
+            let handler = method.name.as_str();
+            let payload = if notification {
+                method.input_type.as_str()
+            } else {
+                method.output_type.as_str()
+            };
+
+            buf.push_str(&format!(
+                "    /// The wire name of the `{}` request.\n",
+                method.proto_name
+            ));
+            buf.push_str(&format!(
+                "    const {constant}_NAME: &'static str = \"{}.{}#1\";\n",
+                service.proto_name, method.proto_name
+            ));
+            buf.push_str(&format!(
+                "    /// Handles the `{}` {} message.\n",
+                method.proto_name,
+                if notification { "notification" } else { "response" }
+            ));
+            buf.push_str(&format!(
+                "    fn handle_{handler}(&mut self, message: &{payload});\n"
+            ));
+        }
+
+        buf.push_str("}\n\n");
+    }
+}
+
+/// True when the method answers with `NoResponse`, which marks it as a notification.
+fn is_notification(method: &Method) -> bool {
+    method.output_proto_type.strip_prefix('.').unwrap_or(&method.output_proto_type) == "NoResponse"
+}
+
+/// Converts a name to `SCREAMING_SNAKE_CASE`.
+fn screaming_snake(name: &str) -> String {
+    let mut out = String::with_capacity(name.len());
+    let mut previous_was_lower = false;
+
+    for character in name.chars() {
+        if character == '_' || character == '.' {
+            out.push('_');
+            previous_was_lower = false;
+            continue;
+        }
+        if character.is_uppercase() && previous_was_lower {
+            out.push('_');
+        }
+        out.extend(character.to_lowercase());
+        previous_was_lower = character.is_lowercase() || character.is_numeric();
+    }
+
+    out.to_uppercase()
+}

@@ -1,0 +1,54 @@
+[package]
+name = "steamkit"
+description = "Rust port of SteamKit2, a .NET library that aims to interoperate with the Steam network."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+[dependencies]
+steamkit-protos = { path = "../steamkit-protos" }
+tokio.workspace = true
+tokio-util.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+bytes.workspace = true
+hex.workspace = true
+base64.workspace = true
+rand.workspace = true
+
+prost.workspace = true
+prost-types.workspace = true
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+percent-encoding = "2"
+chrono = { version = "0.4", default-features = false, features = ["std", "clock", "serde"] }
+
+aes = "0.8"
+cbc = "0.1"
+ecb = "0.1"
+hmac = "0.12"
+sha1 = "0.10"
+sha2 = "0.10"
+md-5 = "0.10"
+rsa = "0.9"
+crc32fast = "1"
+zstd = "0.13"
+flate2 = "1"
+
+dashmap = "6"
+parking_lot = "0.12"
+# "json" for parsing the Steam Directory responses.
+reqwest = { version = "0.12", features = ["json"] }
+
+# native-tls uses the OS TLS stack, so there's no nasm/cmake build dependency.
+tokio-tungstenite = { version = "0.24", features = ["native-tls"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"

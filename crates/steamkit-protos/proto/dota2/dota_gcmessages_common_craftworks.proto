@@ -1,0 +1,21 @@
+import "steammessages.proto";
+import "dota_shared_enums.proto";
+import "gcsdk_gcmessages.proto";
+import "google/protobuf/descriptor.proto";
+
+enum ECraftworksAuditAction {
+	k_eInvalid = 0;
+	k_eRecipeCrafted = 1;
+	k_eMatchRewards = 2;
+	k_eMatchRewardsTurbo = 3;
+}
+
+message CMsgCraftworksComponents {
+	map<uint32, uint32> component_quantities = 1;
+}
+
+message CMsgCraftworksQuestReward {
+	optional uint32 quest_id = 1 ;
+	optional .CMsgCraftworksComponents reward_components = 2;
+	optional uint32 stat_value = 3;
+}

@@ -1,0 +1,81 @@
+[package]
+name = "steamkit-samples"
+description = "Sample programs for steamkit."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+steamkit = { path = "../steamkit" }
+# Some samples build protobuf messages directly; steamkit doesn't re-export them.
+steamkit-protos = { path = "../steamkit-protos" }
+tokio.workspace = true
+tokio-util.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+serde_json.workspace = true
+# Only needed to name `reqwest::Method` for `call_with_method`.
+reqwest = { version = "0.12", features = ["json"] }
+
+[[bin]]
+name = "000_authentication"
+path = "src/bin/000_authentication.rs"
+
+[[bin]]
+name = "001_authentication_with_qr_code"
+path = "src/bin/001_authentication_with_qr_code.rs"
+
+[[bin]]
+name = "002_web_cookie"
+path = "src/bin/002_web_cookie.rs"
+
+[[bin]]
+name = "003_server_list"
+path = "src/bin/003_server_list.rs"
+
+[[bin]]
+name = "004_legacy_login"
+path = "src/bin/004_legacy_login.rs"
+
+[[bin]]
+name = "005_legacy_steam_guard"
+path = "src/bin/005_legacy_steam_guard.rs"
+
+[[bin]]
+name = "010_extending"
+path = "src/bin/010_extending.rs"
+
+[[bin]]
+name = "011_debug_log"
+path = "src/bin/011_debug_log.rs"
+
+[[bin]]
+name = "012_async_jobs"
+path = "src/bin/012_async_jobs.rs"
+
+[[bin]]
+name = "013_unified_messages"
+path = "src/bin/013_unified_messages.rs"
+
+[[bin]]
+name = "020_friends"
+path = "src/bin/020_friends.rs"
+
+[[bin]]
+name = "021_web_api"
+path = "src/bin/021_web_api.rs"
+
+[[bin]]
+name = "022_dota_match_request"
+path = "src/bin/022_dota_match_request.rs"
+
+[[bin]]
+name = "900_live_check"
+path = "src/bin/900_live_check.rs"
+
+[[bin]]
+name = "999_test_bed"
+path = "src/bin/999_test_bed.rs"

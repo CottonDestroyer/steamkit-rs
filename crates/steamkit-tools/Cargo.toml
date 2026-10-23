@@ -1,0 +1,52 @@
+[package]
+name = "steamkit-tools"
+description = "Code generators and analysis tools for steamkit: the SteamLanguage (.steamd) parser and Rust generator, the protobuf generator and dumper, and a NetHook2 dump analyzer."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "steamkit_tools"
+path = "src/lib.rs"
+
+[[bin]]
+name = "steamkit-lang-gen"
+path = "src/main.rs"
+
+[[bin]]
+name = "steamkit-proto-gen"
+path = "src/bin/steamkit-proto-gen.rs"
+
+[[bin]]
+name = "steamkit-proto-dump"
+path = "src/bin/steamkit-proto-dump.rs"
+
+[[bin]]
+name = "steamkit-nethook-analyzer"
+path = "src/bin/steamkit-nethook-analyzer.rs"
+
+[[bin]]
+name = "steamkit-depot-dump"
+path = "src/bin/steamkit-depot-dump.rs"
+
+
+# The .steamd parser is std-only; the protobuf tools need prost / prost-build.
+[dependencies]
+prost.workspace = true
+prost-types.workspace = true
+prost-build = "0.13"
+
+# Bundled protoc, so no system-wide install is needed.
+protoc-bin-vendored = "3"
+
+# The NetHook dump analyzer decodes captured Steam messages.
+steamkit = { path = "../steamkit" }
+steamkit-protos = { path = "../steamkit-protos" }
+serde = { version = "1", features = ["derive"] }
+serde_json.workspace = true
+
+# Multi messages in a dump are gzip compressed.
+flate2 = "1"
+
+hex.workspace = true
