@@ -5,6 +5,7 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
+publish = false
 
 [lib]
 name = "steamkit_tools"
@@ -41,8 +42,8 @@ prost-build = "0.13"
 protoc-bin-vendored = "3"
 
 # The NetHook dump analyzer decodes captured Steam messages.
-steamkit = { path = "../steamkit" }
-steamkit-protos = { path = "../steamkit-protos" }
+steamkit = { package = "steamkit-rs", path = "../steamkit" }
+steamkit-protos = { package = "steamkit-rs-protos", path = "../steamkit-protos" }
 serde = { version = "1", features = ["derive"] }
 serde_json.workspace = true
 

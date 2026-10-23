@@ -8,8 +8,8 @@ license.workspace = true
 publish = false
 
 [dependencies]
-steamkit = { path = "../steamkit" }
-steamkit-protos = { path = "../steamkit-protos" }
+steamkit = { package = "steamkit-rs", path = "../steamkit" }
+steamkit-protos = { package = "steamkit-rs-protos", path = "../steamkit-protos" }
 steamkit-tools = { path = "../steamkit-tools" }
 tokio.workspace = true
 tokio-util.workspace = true

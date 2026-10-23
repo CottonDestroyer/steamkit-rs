@@ -8,9 +8,9 @@ license.workspace = true
 publish = false
 
 [dependencies]
-steamkit = { path = "../steamkit" }
+steamkit = { package = "steamkit-rs", path = "../steamkit" }
 # Some samples build protobuf messages directly; steamkit doesn't re-export them.
-steamkit-protos = { path = "../steamkit-protos" }
+steamkit-protos = { package = "steamkit-rs-protos", path = "../steamkit-protos" }
 tokio.workspace = true
 tokio-util.workspace = true
 anyhow.workspace = true

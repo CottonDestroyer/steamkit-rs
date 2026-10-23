@@ -1,10 +1,16 @@
 [package]
-name = "steamkit-protos"
+name = "steamkit-rs-protos"
 description = "Steam protobuf message and enum types, generated with prost."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+keywords = ["steam", "protobuf", "valve"]
+categories = ["api-bindings"]
+
+[lib]
+name = "steamkit_protos"
 
 [dependencies]
 prost.workspace = true

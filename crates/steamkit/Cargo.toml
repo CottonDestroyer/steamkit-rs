@@ -1,12 +1,20 @@
 [package]
-name = "steamkit"
+name = "steamkit-rs"
 description = "Rust port of SteamKit2, a .NET library that aims to interoperate with the Steam network."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
+repository.workspace = true
+readme = "../../README.md"
+keywords = ["steam", "steamkit", "valve", "protocol"]
+categories = ["api-bindings", "network-programming", "games"]
+
+[lib]
+name = "steamkit"
+
 [dependencies]
-steamkit-protos = { path = "../steamkit-protos" }
+steamkit-protos = { package = "steamkit-rs-protos", version = "0.1.0", path = "../steamkit-protos" }
 tokio.workspace = true
 tokio-util.workspace = true
 async-trait.workspace = true

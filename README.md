@@ -12,6 +12,19 @@ It covers the CM protocol (TCP, WebSocket and UDP transports, channel encryption
 - CDN downloads, game coordinators and long-running sessions haven't been tested live yet.
 - The NetHook2 DLL builds but hasn't been injected into a real Steam client.
 
+## Using it
+
+```toml
+[dependencies]
+steamkit-rs = "0.1"
+```
+
+The package is `steamkit-rs` on crates.io (the `steamkit` name was taken), but the library is still called `steamkit`:
+
+```rust
+use steamkit::steam::steam_client::steam_client::SteamClient;
+```
+
 ## Building
 
 ```sh
@@ -37,8 +50,8 @@ Scan the code with the Steam mobile app. On Windows the console can't draw the b
 
 | Crate | What it is |
 |---|---|
-| `steamkit` | the library |
-| `steamkit-protos` | generated protobuf messages (built from `proto/` at compile time) |
+| `steamkit` | the library, published as `steamkit-rs` |
+| `steamkit-protos` | generated protobuf messages, published as `steamkit-rs-protos` (built from `proto/` at compile time) |
 | `steamkit-tools` | `.steamd` code generator, protobuf generator / dumper, NetHook dump analyzer |
 | `steamkit-nethook` | NetHook2, a Windows DLL that logs the Steam client's network traffic |
 | `steamkit-samples` | the sample programs |

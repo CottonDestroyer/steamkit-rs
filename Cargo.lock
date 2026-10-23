@@ -1774,7 +1774,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 
 [[package]]
-name = "steamkit"
+name = "steamkit-nethook"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "flate2",
+ "prost",
+ "steamkit-rs-protos",
+ "windows",
+]
+
+[[package]]
+name = "steamkit-rs"
 version = "0.1.0"
 dependencies = [
  "aes",
@@ -1802,7 +1813,7 @@ dependencies = [
  "serde_json",
  "sha1",
  "sha2",
- "steamkit-protos",
+ "steamkit-rs-protos",
  "thiserror",
  "tokio",
  "tokio-tungstenite",
@@ -1812,18 +1823,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "steamkit-nethook"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "flate2",
- "prost",
- "steamkit-protos",
- "windows",
-]
-
-[[package]]
-name = "steamkit-protos"
+name = "steamkit-rs-protos"
 version = "0.1.0"
 dependencies = [
  "prost",
@@ -1839,8 +1839,8 @@ dependencies = [
  "anyhow",
  "reqwest",
  "serde_json",
- "steamkit",
- "steamkit-protos",
+ "steamkit-rs",
+ "steamkit-rs-protos",
  "tokio",
  "tokio-util",
  "tracing",
@@ -1863,8 +1863,8 @@ dependencies = [
  "rand",
  "reqwest",
  "serde_json",
- "steamkit",
- "steamkit-protos",
+ "steamkit-rs",
+ "steamkit-rs-protos",
  "steamkit-tools",
  "thiserror",
  "tokio",
@@ -1885,8 +1885,8 @@ dependencies = [
  "protoc-bin-vendored",
  "serde",
  "serde_json",
- "steamkit",
- "steamkit-protos",
+ "steamkit-rs",
+ "steamkit-rs-protos",
 ]
 
 [[package]]
