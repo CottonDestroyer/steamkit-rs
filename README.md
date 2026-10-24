@@ -4,14 +4,6 @@ A Rust port of [SteamKit2](https://github.com/SteamRE/SteamKit), the .NET librar
 
 It covers the CM protocol (TCP, WebSocket and UDP transports, channel encryption), the handlers (`SteamUser`, `SteamFriends`, `SteamApps`, unified messages, game coordinator, ...), the authentication flows (credentials and QR code), the Web API, the CDN client and depot manifests. It also ports SteamKit's tooling: the `.steamd` code generator, the protobuf dumper, and the NetHook2 DLL plus its dump analyzer.
 
-## Status
-
-- Logging on works against live Steam over TCP (QR flow tested on a real account).
-- A logged-on session works: friends list, unified messages, PICS product info and depot keys.
-- The WebSocket transport connects, but Steam closes the session after a minute or two, so the default connection order is TCP first.
-- CDN downloads, game coordinators and long-running sessions haven't been tested live yet.
-- The NetHook2 DLL builds but hasn't been injected into a real Steam client.
-
 ## Using it
 
 ```toml
@@ -44,7 +36,11 @@ cargo run -p steamkit-samples --bin 001_authentication_with_qr_code
 
 Scan the code with the Steam mobile app. On Windows the console can't draw the block characters, so the code is also written to `%TEMP%\steamkit-qr-login.svg`.
 
-`900_live_check` logs on the same way and runs a set of PASS/FAIL checks against a logged-on session. It doesn't change anything on the account.
+Three more samples run PASS/FAIL checks against live Steam:
+
+- `900_live_check` logs on with a QR code and checks a logged-on session. It doesn't change anything on the account.
+- `901_live_cdn` logs on anonymously (no QR code, no account) and downloads a small free depot through the CDN, checking every file against the manifest.
+- `902_live_account` logs on with a QR code and checks persona state (only `Invisible`, then back to `Offline`), the Dota 2 game coordinator and a CDN download with the account's depot key, then keeps the session up for `STEAMKIT_SOAK_MINUTES` minutes (default 30). It sends no chat message and doesn't change the account name.
 
 ## Crates
 

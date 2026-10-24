@@ -17,6 +17,7 @@ anyhow.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 serde_json.workspace = true
+sha1 = "0.10"
 # Only needed to name `reqwest::Method` for `call_with_method`.
 reqwest = { version = "0.12", features = ["json"] }
 
@@ -79,3 +80,11 @@ path = "src/bin/900_live_check.rs"
 [[bin]]
 name = "999_test_bed"
 path = "src/bin/999_test_bed.rs"
+
+[[bin]]
+name = "901_live_cdn"
+path = "src/bin/901_live_cdn.rs"
+
+[[bin]]
+name = "902_live_account"
+path = "src/bin/902_live_account.rs"
