@@ -1,4 +1,4 @@
-//! The builder interface for [`SteamConfiguration`].
+//! The builder interface for [`SteamConfiguration`](crate::steam::steam_client::configuration::steam_configuration::SteamConfiguration).
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -11,7 +11,7 @@ use super::i_machine_info_provider::IMachineInfoProvider;
 use super::steam_configuration::HttpClientFactory;
 use super::steam_configuration_state::PersonaStateFlags;
 
-/// Configures a [`SteamConfiguration`](super::SteamConfiguration) before it's
+/// Configures a [`SteamConfiguration`](crate::steam::steam_client::configuration::steam_configuration::SteamConfiguration) before it's
 /// created.
 pub trait ISteamConfigurationBuilder {
     /// Sets the Steam cell to prefer.

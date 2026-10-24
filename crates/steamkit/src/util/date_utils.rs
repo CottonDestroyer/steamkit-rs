@@ -1,4 +1,4 @@
-//! Converting between Unix timestamps and [`SystemTime`](std::time::SystemTime).
+//! Converting between Unix timestamps and [`SystemTime`].
 
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 

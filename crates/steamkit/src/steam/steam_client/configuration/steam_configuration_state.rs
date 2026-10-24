@@ -1,4 +1,4 @@
-//! The raw values of a configuration, filled in by [`SteamConfigurationBuilder`].
+//! The raw values of a configuration, filled in by [`SteamConfigurationBuilder`](crate::steam::steam_client::configuration::steam_configuration_builder::SteamConfigurationBuilder).
 
 use std::fmt;
 use std::ops::BitOr;
@@ -76,7 +76,7 @@ impl From<EClientPersonaStateFlag> for PersonaStateFlags {
     }
 }
 
-/// The raw values of a [`SteamConfiguration`](super::SteamConfiguration).
+/// The raw values of a [`SteamConfiguration`](crate::steam::steam_client::configuration::steam_configuration::SteamConfiguration).
 #[derive(Clone)]
 pub struct SteamConfigurationState {
     /// Whether to fetch the server list from the Steam Directory.

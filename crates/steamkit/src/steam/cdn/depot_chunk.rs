@@ -13,7 +13,7 @@
 //!
 //! What describes a chunk (SHA-1 id, Adler32 of the decompressed data, offset,
 //! compressed and uncompressed size) is in the manifest, see
-//! [`ChunkData`](crate::types::depot_manifest::ChunkData).
+//! [`ChunkData`].
 //! [`DepotChunk::process`] decrypts and decompresses a chunk and checks it
 //! against that.
 

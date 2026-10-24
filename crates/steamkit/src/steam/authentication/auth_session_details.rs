@@ -62,7 +62,7 @@ impl Default for AuthSessionDetails {
 
 impl AuthSessionDetails {
     /// Details with the usual defaults: Steam client platform, website
-    /// "Client", a non-persistent session, and "<machine name> (SteamKit2)" as
+    /// "Client", a non-persistent session, and "`<machine name>` (SteamKit2)" as
     /// the device name.
     pub fn new() -> Self {
         AuthSessionDetails::default()

@@ -163,7 +163,7 @@ impl SteamID {
         true
     }
 
-    /// Sets this SteamID from a Steam3 "[X:1:2:3]" string. Returns `false` if
+    /// Sets this SteamID from a Steam3 "\[X:1:2:3\]" string. Returns `false` if
     /// the string isn't valid.
     pub fn set_from_steam3_string(&mut self, steam_id: &str) -> bool {
         let Some(parsed) = parse_steam3_id(steam_id) else {
@@ -383,7 +383,7 @@ impl SteamID {
         self.0 = (self.0 & !(0xFF_u64 << 56)) | (raw << 56);
     }
 
-    /// Renders this SteamID as Steam3 ("[U:1:123]") or Steam2 ("STEAM_0:1:61").
+    /// Renders this SteamID as Steam3 ("\[U:1:123\]") or Steam2 ("STEAM_0:1:61").
     pub fn render(&self, steam3: bool) -> String {
         if steam3 {
             self.render_steam3()

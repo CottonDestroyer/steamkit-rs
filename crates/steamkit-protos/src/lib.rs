@@ -1,18 +1,4 @@
-//! Steam protobuf messages and enums, generated with `prost` from Valve's
-//! `.proto` files.
-//!
-//! | Module | Contents |
-//! |---|---|
-//! | [`steam`] | Steam client messages |
-//! | [`webui`] | Web UI service messages |
-//! | [`csgo`] | Counter-Strike game coordinator |
-//! | [`dota2`] | Dota 2 game coordinator |
-//! | [`tf2`] | Team Fortress 2 game coordinator |
-//! | [`deadlock`] | Deadlock game coordinator |
-//! | [`gc`] | Shared game coordinator messages |
-//!
-//! The proto files don't declare a package, so every file in a directory
-//! ends up in the same module.
+#![doc = include_str!("../README.md")]
 
 pub mod csgo {
     include!(concat!(env!("OUT_DIR"), "/csgo/csgo.rs"));

@@ -3,7 +3,7 @@
 //! It answers the server's `ChannelEncryptRequest` with a fresh 32-byte session
 //! key, RSA-OAEP-SHA1 encrypted with the universe's public key. After that every
 //! message is encrypted with AES-256-CBC and authenticated with HMAC-SHA1 (see
-//! [`NetFilterEncryptionWithHMAC`](super::net_filter_encryption_with_hmac::NetFilterEncryptionWithHMAC)).
+//! [`NetFilterEncryptionWithHMAC`]).
 //!
 //! # Handshake wire format
 //!

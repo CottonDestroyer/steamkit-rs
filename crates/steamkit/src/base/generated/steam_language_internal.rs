@@ -18,7 +18,7 @@
 //! # SteamID fields
 //!
 //! SteamID fields are stored as the raw `u64`. Use `SteamID::from_id(value)`
-//! to get a [`SteamID`].
+//! to get a [`SteamID`](crate::types::steam_id::SteamID).
 
 use prost::Message as ProstMessage;
 

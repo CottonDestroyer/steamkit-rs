@@ -1,5 +1,6 @@
-//! A Rust port of [SteamKit2](https://github.com/SteamRE/SteamKit), a library for
-//! talking to the Steam network.
+#![doc = include_str!("../README.md")]
+//!
+//! # Modules
 //!
 //! The modules follow SteamKit2's namespaces:
 //!

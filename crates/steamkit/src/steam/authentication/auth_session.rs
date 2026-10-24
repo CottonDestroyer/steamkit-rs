@@ -1,7 +1,7 @@
 //! An authentication session, used to finish authenticating and get the tokens.
 //!
 //! Credentials and QR sessions share [`AuthSession`]; what differs between them
-//! lives in [`SessionKind`], and the public session types wrap an [`AuthSession`].
+//! lives in `SessionKind`, and the public session types wrap an [`AuthSession`].
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Weak};
@@ -328,7 +328,7 @@ impl AuthSession {
     }
 
     /// Handles a poll response. QR sessions also pick up a refreshed challenge
-    /// URL here (see [`SessionKind::Qr`]).
+    /// URL here (see `SessionKind::Qr`).
     pub fn handle_poll_auth_session_status_response(
         &self,
         response: &CAuthenticationPollAuthSessionStatusResponse,

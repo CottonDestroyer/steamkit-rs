@@ -1,6 +1,6 @@
 //! The base client that owns the connection to a CM server.
 //!
-//! [`SteamClient`](crate::steam::steam_client::SteamClient) owns a `CMClient`
+//! [`SteamClient`](crate::steam::steam_client::steam_client::SteamClient) owns a `CMClient`
 //! and plugs into it through the [`ClientMsgDispatcher`] trait.
 
 use std::fmt;
@@ -139,7 +139,7 @@ struct HeartBeat {
 }
 
 /// The base client that handles the connection to a CM server. Use it through
-/// [`SteamClient`](crate::steam::steam_client::SteamClient).
+/// [`SteamClient`](crate::steam::steam_client::steam_client::SteamClient).
 pub struct CMClient {
     configuration: Arc<SteamConfiguration>,
     id: String,
@@ -198,7 +198,7 @@ impl fmt::Debug for CMClient {
 
 impl CMClient {
     /// Creates a client with the given configuration. The identifier must not
-    /// be empty (the [`SteamClient`](crate::steam::steam_client::SteamClient)
+    /// be empty (the [`SteamClient`](crate::steam::steam_client::steam_client::SteamClient)
     /// constructors check this).
     pub fn new(
         configuration: Arc<SteamConfiguration>,

@@ -1,8 +1,8 @@
 //! Authenticating with Steam: the credentials and QR code flows.
 //!
 //! These go through the `Authentication` unified service. prost doesn't
-//! generate service clients, so [`SteamAuthentication::call_service`] sends the
-//! request itself and [`AuthenticationServiceHandler`] matches the response to
+//! generate service clients, so `SteamAuthentication::call_service` sends the
+//! request itself and `AuthenticationServiceHandler` matches the response to
 //! it by job id.
 
 use std::collections::HashMap;
