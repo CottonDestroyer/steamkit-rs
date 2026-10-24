@@ -8,7 +8,7 @@ It covers the CM protocol (TCP, WebSocket and UDP transports, channel encryption
 
 ```toml
 [dependencies]
-steamkit-rs = "0.1"
+steamkit-rs = "0.1.2"
 ```
 
 The package is `steamkit-rs` on crates.io (the `steamkit` name was taken), but the library is still called `steamkit`:

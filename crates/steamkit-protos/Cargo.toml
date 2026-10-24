@@ -13,6 +13,19 @@ categories = ["api-bindings"]
 [lib]
 name = "steamkit_protos"
 
+# The `steam` and `gc` messages are always built. Each of the others is a
+# large generated module of its own, so they can be turned off.
+[features]
+default = ["csgo", "dota2", "tf2", "deadlock", "webui"]
+csgo = []
+dota2 = []
+tf2 = []
+deadlock = []
+webui = []
+
+[package.metadata.docs.rs]
+all-features = true
+
 [dependencies]
 prost.workspace = true
 prost-types.workspace = true

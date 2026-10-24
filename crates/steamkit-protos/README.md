@@ -4,20 +4,27 @@ Steam protobuf messages and enums for Rust, generated with [`prost`](https://cra
 
 ```toml
 [dependencies]
-steamkit-rs-protos = "0.1"
+steamkit-rs-protos = "0.1.2"
 ```
 
 The library is called `steamkit_protos`:
 
-| Module | Contents |
-|---|---|
-| `steam` | Steam client messages |
-| `webui` | Web UI service messages |
-| `csgo` | Counter-Strike game coordinator |
-| `dota2` | Dota 2 game coordinator |
-| `tf2` | Team Fortress 2 game coordinator |
-| `deadlock` | Deadlock game coordinator |
-| `gc` | Shared game coordinator messages |
+| Module | Contents | Feature |
+|---|---|---|
+| `steam` | Steam client messages | always on |
+| `gc` | Shared game coordinator messages | always on |
+| `webui` | Web UI service messages | `webui` |
+| `csgo` | Counter-Strike game coordinator | `csgo` |
+| `dota2` | Dota 2 game coordinator | `dota2` |
+| `tf2` | Team Fortress 2 game coordinator | `tf2` |
+| `deadlock` | Deadlock game coordinator | `deadlock` |
+
+All the features are on by default. Each of those modules is a lot of generated code, so turn off the ones you don't use to build faster and use less memory. This keeps the Dota 2 messages and nothing else:
+
+```toml
+[dependencies]
+steamkit-rs-protos = { version = "0.1.2", default-features = false, features = ["dota2"] }
+```
 
 ```rust
 use prost::Message;

@@ -25,6 +25,10 @@ fn main() {
         let mut parts = line.split_whitespace();
         let dir = parts.next().expect("proto set name");
         let files: Vec<String> = parts.map(str::to_string).collect();
+        // `steam` is always built; the others only with their feature.
+        if dir != "steam" && std::env::var_os(format!("CARGO_FEATURE_{}", dir.to_uppercase())).is_none() {
+            continue;
+        }
         let include_dir = proto_root.join(dir);
         compile_set(
             &protoc,

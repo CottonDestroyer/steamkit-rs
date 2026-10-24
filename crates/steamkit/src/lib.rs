@@ -8,7 +8,7 @@
 //! |---|---|
 //! | `SteamKit2.Base` | [`base`] |
 //! | `SteamKit2.Base.GC` | [`base::gc`] |
-//! | `SteamKit2.Base.Generated` | [`base::generated`] (re-exports `steamkit_protos`) |
+//! | `SteamKit2.Base.Generated` | [`base::generated`] (the message types are in the `steamkit-rs-protos` crate) |
 //! | `SteamKit2.Networking.Steam3` | [`networking::steam3`] |
 //! | `SteamKit2.SteamClient` | [`steam::steam_client`] |
 //! | `SteamKit2.Internal` | [`steam::cm_client`], [`steam::handlers`] and friends |
